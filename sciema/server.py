@@ -22,12 +22,30 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render("home.html")
 
 
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
+
+    def open(self, *args):
+        print('Nowy klient')
+        self.stream.set_nodelay(True)
+
+    def on_message(self, message):
+        print('Nowa wiadomość: ', message)
+        self.write_message(u"Sam jesteś: {}".format(message))
+
+    def on_close(self):
+        print('Ucieczka!')
+
+    def check_origin(self, origin):
+        return True
+
+
 STATIC_ROOT = os.path.join(CURRENT_DIR, "static")
 
 
 app = tornado.web.Application(
     [
         (r'/', IndexHandler),
+        (r'/websocket', WebSocketHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': STATIC_ROOT}),
     ],
     template_path=os.path.join(CURRENT_DIR, "templates"),
