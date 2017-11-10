@@ -10,6 +10,9 @@ import tornado.websocket
 from tornado.options import define, options, parse_command_line
 
 
+CURRENT_DIR = os.path.dirname(__file__)
+
+
 define('port', default=8888, help=u'Port na którym serwer ma działać', type=int)
 
 
@@ -19,9 +22,15 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render("home.html")
 
 
+STATIC_ROOT = os.path.join(CURRENT_DIR, "static")
+
+
 app = tornado.web.Application(
-    [(r'/', IndexHandler),],
-    template_path=os.path.join(os.path.dirname(__file__), "templates")
+    [
+        (r'/', IndexHandler),
+        (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': STATIC_ROOT}),
+    ],
+    template_path=os.path.join(CURRENT_DIR, "templates"),
 )
 
 
