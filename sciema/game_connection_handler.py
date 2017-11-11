@@ -26,9 +26,8 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         print('Nowa wiadomość: ', message)
         # validate input data
-        is_valid, data, errors = self.basic_validate(message)
-        if not is_valid:
-            self.snd(errors)
+        data = self.basic_validate(message)
+        if data is None:
             return
 
         action = data.get('action')
@@ -56,18 +55,22 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
 
     # data handling -------------------
 
-    @staticmethod
-    def basic_validate(message):
+    def basic_validate(self, message):
         errors = []
         # load json from message
         try:
             data = json.loads(message)
         except json.decoder.JSONDecodeError:
             errors.append('JSON decode error')
-            return False, {'errors': errors}, None
+            self.snd({'errors': errors})
+            return None
 
         for key in ['action', 'game']:
             if not data.get(key):
                 errors.append('Missing parameter {}'.format(key))
 
-        return not bool(errors), data, {'errors': errors}
+        if errors:
+            self.snd({'errors': errors})
+            return None
+        return data
+
