@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+from __future__ import absolute_import
+
 import json
 
 import tornado.websocket
+
+from .game import Game
 
 
 GAMES = {}
@@ -15,6 +19,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.game = None
+        self.player_name = None
 
     # connections handling ------------
 
@@ -64,14 +69,16 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def dispatch(self, data):
         if data['action'] == 'new_game':
             if data['game'] in GAMES:
-                if data['game'] in GAMES:
-                    # validation error
-                    self.err('Game already exists. Choose another name')
-                else:
-                    GAMES[data['game']] = [data['player'],]
+                # validation error
+                self.err('Game already exists. Choose another name')
+            else:
+                game = Game(data['game'], self)
+                if game.add_player(self, data):
+                    GAMES[data['game']] = game
         elif data['action'] == 'join_game':
             if data['game'] in GAMES:
-                self.game = GAMES[data['game']]
+                game = GAMES[data['game']]
+                game.add_player(self, data)
             else:
                 # validation error
                 self.err('Game does not exist')
@@ -80,7 +87,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if self.game is None:
                 self.err('Unadeqate action')
                 return
-            #self.game.handle_action(data)
+            self.game.handle_action(data)
 
     # helpers -------------------------
 
