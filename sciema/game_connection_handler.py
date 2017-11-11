@@ -41,9 +41,6 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-    def snd(self, data_dict):
-        self.write_message(json.dumps(data_dict))
-
     # data handling -------------------
 
     def basic_validate(self, message):
@@ -52,8 +49,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         try:
             data = json.loads(message)
         except json.decoder.JSONDecodeError:
-            errors.append('JSON decode error')
-            self.snd({'errors': errors})
+            self.err('JSON decode error')
             return None
 
         for key in ['action', 'game']:
@@ -70,9 +66,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if data['game'] in GAMES:
                 if data['game'] in GAMES:
                     # validation error
-                    self.snd(
-                        {'errors': ['Game already exists. Choose another name']}
-                    )
+                    self.err('Game already exists. Choose another name')
                 else:
                     GAMES[data['game']] = [data['player'],]
         elif data['action'] == 'join_game':
@@ -80,10 +74,18 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
                 self.game = GAMES[data['game']]
             else:
                 # validation error
-                self.snd({'errors': ['Game does not exist']})
+                self.err('Game does not exist')
         else:
             # pass this to game object
             if self.game is None:
-                self.snd({'errors': ['Unadeqate action']})
+                self.err('Unadeqate action')
                 return
             #self.game.handle_action(data)
+
+    # helpers -------------------------
+
+    def err(self, message):
+        self.snd({'errors': [message]})
+
+    def snd(self, data_dict):
+        self.write_message(json.dumps(data_dict))
