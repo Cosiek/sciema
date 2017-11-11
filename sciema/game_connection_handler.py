@@ -45,6 +45,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         self.write_message(json.dumps(GAMES))
 
     def on_close(self):
+        CLIENTS.remove(self)
         print('Ucieczka!')
 
     def check_origin(self, origin):
