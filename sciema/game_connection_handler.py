@@ -29,6 +29,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         is_valid, data, errors = self.basic_validate(message)
         if not is_valid:
             self.snd(errors)
+            return
 
         action = data.get('action')
         if action == 'new_game':
@@ -68,4 +69,4 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if not data.get(key):
                 errors.append('Missing parameter {}'.format(key))
 
-        return bool(errors), {'errors': errors}, data
+        return not bool(errors), data, {'errors': errors}
