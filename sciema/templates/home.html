@@ -5,7 +5,25 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<button id="send">Ślij</button>
+		<div id="form">
+			<label for="player-name">Ksyfka: </label>
+			<input type="text" id="player-name">
+
+			<hr>
+			<h3>Dołącz do gry:</h3>
+			<ul>
+				{% for game in games %}
+					<li>{{ game }}</li><button class="js-join" data-game="{{ game }}">Dołącz</button>
+				{% end %}
+			</ul>
+
+			<hr>
+			<h3>Załóż nową grę:</h3>
+			<label for="player-name">Nazwa: </label>
+			<input type="text" id="new-game-name">
+			<button id="new-game-start">Wyślij</button>
+		</div>
+
 		<script src="/static/client.js" async></script>
 	</body>
 </html>

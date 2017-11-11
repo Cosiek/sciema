@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import json
 import os
 import socket
 
@@ -11,7 +12,7 @@ from tornado.options import define, options, parse_command_line
 
 
 CURRENT_DIR = os.path.dirname(__file__)
-
+GAMES = {'A': [], 'B': []}
 
 define('port', default=8888, help=u'Port na którym serwer ma działać', type=int)
 
@@ -19,7 +20,7 @@ define('port', default=8888, help=u'Port na którym serwer ma działać', type=i
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
-        self.render("home.html")
+        self.render("home.html", games=GAMES)
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -30,7 +31,25 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         print('Nowa wiadomość: ', message)
-        self.write_message(u"Sam jesteś: {}".format(message))
+        # validate input data
+        try:
+            data = json.loads(message)
+        except json.decoder.JSONDecodeError:
+            data = {}
+            self.write_message(u"Sam jesteś: {}".format(message))
+
+        action = data.get('action')
+        if action == 'new_game':
+            if data['game'] in GAMES:
+                # validation error
+                pass
+            else:
+                GAMES[data['game']] = [data['player'],]
+        else:
+            GAMES[data['game']].append(data['player'])
+
+        self.write_message(json.dumps(GAMES))
+
 
     def on_close(self):
         print('Ucieczka!')
