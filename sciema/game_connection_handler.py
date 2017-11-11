@@ -30,17 +30,8 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         if data is None:
             return
 
-        action = data.get('action')
-        if action == 'new_game':
-            if data['game'] in GAMES:
-                # validation error
-                pass
-            else:
-                GAMES[data['game']] = [data['player'],]
-        else:
-            GAMES[data['game']].append(data['player'])
+        self.dispatch(data)
 
-        self.game = GAMES[data['game']]
         self.write_message(json.dumps(GAMES))
 
     def on_close(self):
@@ -74,3 +65,25 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             return None
         return data
 
+    def dispatch(self, data):
+        if data['action'] == 'new_game':
+            if data['game'] in GAMES:
+                if data['game'] in GAMES:
+                    # validation error
+                    self.snd(
+                        {'errors': ['Game already exists. Choose another name']}
+                    )
+                else:
+                    GAMES[data['game']] = [data['player'],]
+        elif data['action'] == 'join_game':
+            if data['game'] in GAMES:
+                self.game = GAMES[data['game']]
+            else:
+                # validation error
+                self.snd({'errors': ['Game does not exist']})
+        else:
+            # pass this to game object
+            if self.game is None:
+                self.snd({'errors': ['Unadeqate action']})
+                return
+            #self.game.handle_action(data)
