@@ -30,6 +30,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         super()
         self.game = None
 
+    # connections handling ------------
+
     def open(self, *args):
         print('Nowy klient')
         self.stream.set_nodelay(True)
@@ -38,11 +40,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         print('Nowa wiadomość: ', message)
         # validate input data
-        try:
-            data = json.loads(message)
-        except json.decoder.JSONDecodeError:
-            data = {}
-            self.write_message(u"Sam jesteś: {}".format(message))
+        is_valid, data, errors = self.basic_validate(message)
+        if not is_valid:
+            self.snd(errors)
 
         action = data.get('action')
         if action == 'new_game':
@@ -62,6 +62,28 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def check_origin(self, origin):
         return True
+
+    def snd(self, data_dict):
+        self.write_message(json.dumps(data_dict))
+
+    # data handling -------------------
+
+    @staticmethod
+    def basic_validate(message):
+        errors = []
+        # load json from message
+        try:
+            data = json.loads(message)
+        except json.decoder.JSONDecodeError:
+            errors.append('JSON decode error')
+            return False, {'errors': errors}, None
+
+        for key in ['action', 'game']:
+            if not data.get(key):
+                errors.append('Missing parameter {}'.format(key))
+
+        return bool(errors), {'errors': errors}, data
+
 
 
 STATIC_ROOT = os.path.join(CURRENT_DIR, "static")
