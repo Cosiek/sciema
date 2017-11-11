@@ -12,9 +12,10 @@ from tornado.options import define, options, parse_command_line
 
 
 CURRENT_DIR = os.path.dirname(__file__)
-GAMES = {'A': [], 'B': []}
-
 define('port', default=8888, help=u'Port na którym serwer ma działać', type=int)
+
+GAMES = {'A': [], 'B': []}
+CLIENTS = []
 
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -25,9 +26,14 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
+    def __init__(self):
+        super()
+        self.game = None
+
     def open(self, *args):
         print('Nowy klient')
         self.stream.set_nodelay(True)
+        CLIENTS.append(self)
 
     def on_message(self, message):
         print('Nowa wiadomość: ', message)
@@ -48,8 +54,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         else:
             GAMES[data['game']].append(data['player'])
 
+        self.game = GAMES[data['game']]
         self.write_message(json.dumps(GAMES))
-
 
     def on_close(self):
         print('Ucieczka!')
