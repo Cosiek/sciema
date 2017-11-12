@@ -23,5 +23,8 @@ class Game(object):
         connection.game = self
         return True
 
+    def player_disconnected(self, connection):
+        pass
+
     def handle_action(self, data):
         pass

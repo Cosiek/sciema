@@ -7,7 +7,7 @@ import json
 
 import tornado.websocket
 
-from .game import Game
+from game import Game
 
 
 GAMES = {}
@@ -37,10 +37,9 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
 
         self.dispatch(data)
 
-        self.write_message(json.dumps(GAMES))
-
     def on_close(self):
         CLIENTS.remove(self)
+        self.game.player_disconnected(self)
         print('Ucieczka!')
 
     def check_origin(self, origin):
@@ -85,9 +84,9 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         else:
             # pass this to game object
             if self.game is None:
-                self.err('Unadeqate action')
-                return
-            self.game.handle_action(data)
+                self.err('Inadequate action')
+            else:
+                self.snd(self.game.handle_action(data))
 
     # helpers -------------------------
 
