@@ -80,7 +80,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if data['game'] in GAMES:
                 game = GAMES[data['game']]
                 if game.add_player(self, data):
-                    self.snd(game.get_game_state())
+                    self.snd_a(game.get_game_state())
             else:
                 # validation error
                 self.err('Game does not exist')
@@ -89,7 +89,7 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if self.game is None:
                 self.err('Inadequate action')
             else:
-                self.snd(self.game.handle_action(data))
+                self.snd_a(self.game.handle_action(data))
 
     # helpers -------------------------
 
@@ -98,3 +98,8 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
 
     def snd(self, data_dict):
         self.write_message(json.dumps(data_dict))
+
+    def snd_a(self, data_dict):
+        if self.game:
+            for client in self.game.players.values():
+                client.snd(data_dict)
