@@ -24,6 +24,9 @@ class Game(object):
         if data['player'] in self.players:
             connection.err('Player name already taken')
             return False
+        if self.state != self.states.waiting:
+            connection.err("The game is already on - it's to late to join")
+            return False
         # set data
         connection.player_name = data['player']
         self.players[data['player']] = connection
@@ -33,8 +36,14 @@ class Game(object):
     def player_disconnected(self, connection):
         pass
 
-    def handle_action(self, data):
-        pass
+    def handle_action(self, data, connection):
+        print(data)
+        if data['action'] == 'run_game':
+            if not connection is self.owner:
+                connection.err("Only the owner can run a game")
+                return False
+            self.state = self.states.game_on
+            return self.get_game_state()
 
     def get_game_state(self):
         return {

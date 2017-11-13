@@ -1,6 +1,7 @@
 (function () {
     var states = {'waiting': 'waiting', 'game_on': 'game_on',
                   'finished': 'finished',}
+    var game = {}
     var ws = new WebSocket('ws://127.0.0.1:8888/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
@@ -15,6 +16,8 @@
             'game': gameName.value,
             'player': playerName.value
         };
+        game.name = data.game
+        game.player = data.player
         ws.send(JSON.stringify(data));
     });
 
@@ -27,9 +30,21 @@
                 'game': this.dataset.game,
                 'player': playerName.value
             };
+            game.name = data.game
+            game.player = data.player  // note - this requires validation from server!
             ws.send(JSON.stringify(data));
         })
     }
+
+    var startButton = document.getElementById('start-play')
+    startButton.addEventListener('click', function(){
+        data = {
+            'action': 'run_game',
+            'game': game.name,
+            'player': game.player
+        };
+        ws.send(JSON.stringify(data));
+    });
 
     // handle return messages -------------------------------------------------
 
@@ -49,9 +64,13 @@
             document.getElementById('form').style.display = 'none';
             document.getElementById('waiting').style.display = 'block';
 
+            gameTitlesE = document.getElementsByClassName('js-game-name');
+            for (gte of gameTitlesE){
+                gte.innerHTML = gdt.name;
+            }
+
             playersListE = document.getElementsByClassName('js-players-list');
             for (ple of playersListE){
-                console.log(ple)
                 while (ple.firstChild) {
                     ple.removeChild(ple.firstChild);
                 }

@@ -89,7 +89,9 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
             if self.game is None:
                 self.err('Inadequate action')
             else:
-                self.snd_a(self.game.handle_action(data))
+                response = self.game.handle_action(data, self)
+                if response:
+                    self.snd_a(response)
 
     # helpers -------------------------
 
