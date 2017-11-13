@@ -2,8 +2,8 @@
     var ws = new WebSocket('ws://127.0.0.1:8888/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
-    ws.onmessage = function(event){console.log(event.data);};
 
+    // events binding ---------------------------------------------------------
     var send = document.getElementById('new-game-start');
     send.addEventListener('click', function () {
         playerName = document.getElementById('player-name');
@@ -29,4 +29,17 @@
         })
     }
 
+    // handle return messages -------------------------------------------------
+
+    ws.onmessage = function(event){
+        gdt = JSON.parse(event.data);
+        console.log(gdt);
+
+        // handling errors
+        if (gdt.errors){
+            for (err of gdt.errors){
+                alert(err)
+            }
+        }
+    };
 })();
