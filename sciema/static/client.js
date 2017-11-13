@@ -1,4 +1,6 @@
 (function () {
+    var states = {'waiting': 'waiting', 'game_on': 'game_on',
+                  'finished': 'finished',}
     var ws = new WebSocket('ws://127.0.0.1:8888/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
@@ -39,6 +41,28 @@
         if (gdt.errors){
             for (err of gdt.errors){
                 alert(err)
+            }
+        }
+
+        // waiting for players
+        if (gdt.state == states.waiting){
+            document.getElementById('form').style.display = 'none';
+            document.getElementById('waiting').style.display = 'block';
+
+            playersListE = document.getElementsByClassName('js-players-list');
+            for (ple of playersListE){
+                console.log(ple)
+                while (ple.firstChild) {
+                    ple.removeChild(ple.firstChild);
+                }
+                for (playerName of gdt.players){
+                    li = document.createElement("li");
+                    li.innerHTML = playerName;
+                    if (playerName == gdt.owner){
+                        li.innerHTML += ' (owner)'
+                    }
+                    ple.appendChild(li);
+                }
             }
         }
     };

@@ -75,10 +75,12 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
                 game = Game(data['game'], self)
                 if game.add_player(self, data):
                     GAMES[data['game']] = game
+                    self.snd(game.get_game_state())
         elif data['action'] == 'join_game':
             if data['game'] in GAMES:
                 game = GAMES[data['game']]
-                game.add_player(self, data)
+                if game.add_player(self, data):
+                    self.snd(game.get_game_state())
             else:
                 # validation error
                 self.err('Game does not exist')
