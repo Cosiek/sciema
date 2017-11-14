@@ -63,6 +63,7 @@
         if (gdt.state == states.waiting){
             document.getElementById('form').style.display = 'none';
             document.getElementById('waiting').style.display = 'block';
+            document.getElementById('finished').style.display = 'none';
 
             gameTitlesE = document.getElementsByClassName('js-game-name');
             for (gte of gameTitlesE){
@@ -83,6 +84,15 @@
                     ple.appendChild(li);
                 }
             }
+        }
+        // game finished (for one reason or another)
+        if (gdt.state == states.finished){
+            document.getElementById('form').style.display = 'none';
+            document.getElementById('waiting').style.display = 'none';
+            document.getElementById('finished').style.display = 'block';
+
+            winnerName = document.getElementsById('winner-name');
+            winnerName.innerHTML = gdt.winner;
         }
     };
 })();
