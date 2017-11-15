@@ -85,10 +85,10 @@
                 while (ple.firstChild) {
                     ple.removeChild(ple.firstChild);
                 }
-                for (playerName of gdt.players){
+                for (playerDct of gdt.players){
                     li = document.createElement("li");
-                    li.innerHTML = playerName;
-                    if (playerName == gdt.owner){
+                    li.innerHTML = playerDct.name;
+                    if (playerDct.name == gdt.owner){
                         li.innerHTML += ' (owner)'
                     }
                     ple.appendChild(li);

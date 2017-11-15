@@ -104,4 +104,4 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def snd_a(self, data_dict):
         if self.game:
             for client in self.game.players.values():
-                client.snd(data_dict)
+                client.connection.snd(data_dict)

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+from player import Player
+
 
 class Game(object):
 
@@ -29,7 +31,7 @@ class Game(object):
             return False
         # set data
         connection.player_name = data['player']
-        self.players[data['player']] = connection
+        self.players[data['player']] = Player(data['player'], connection)
         connection.game = self
         return True
 
@@ -57,6 +59,6 @@ class Game(object):
         return {
             'name': self.name,
             'owner': self.owner.player_name,
-            'players': list(self.players.keys()),
+            'players': [p.to_dct() for p in self.players.values()],
             'state': self.state,
         }
