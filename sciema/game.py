@@ -18,14 +18,14 @@ class Game(object):
 
     def add_player(self, connection, data):
         # validate data
+        if self.state != self.states.waiting:
+            connection.err("The game is already on - it's to late to join")
+            return False
         if not data.get('player'):
             connection.err('Invalid data: missing player name')
             return False
         if data['player'] in self.players:
             connection.err('Player name already taken')
-            return False
-        if self.state != self.states.waiting:
-            connection.err("The game is already on - it's to late to join")
             return False
         # set data
         connection.player_name = data['player']
