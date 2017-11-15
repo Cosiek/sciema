@@ -44,6 +44,14 @@ class Game(object):
                 return False
             self.state = self.states.game_on
             return self.get_game_state()
+        elif data['action'] == 'end-game':
+            if not connection is self.owner:
+                connection.err("Only the owner can finish a game")
+                return False
+            self.state = self.states.finished
+            state = self.get_game_state()
+            state['winner'] = connection.player_name
+            return state
 
     def get_game_state(self):
         return {

@@ -36,7 +36,7 @@
         })
     }
 
-    var startButton = document.getElementById('start-play')
+    var startButton = document.getElementById('start-play');
     startButton.addEventListener('click', function(){
         data = {
             'action': 'run_game',
@@ -45,6 +45,15 @@
         };
         ws.send(JSON.stringify(data));
     });
+
+    var endGameButton = document.getElementById('end-game');
+    endGameButton.addEventListener('click', function(){
+        ws.send(JSON.stringify({
+            'action': 'end-game',
+            'game': game.name,
+            'player': game.player
+        }));
+    })
 
     // handle return messages -------------------------------------------------
 
@@ -63,6 +72,7 @@
         if (gdt.state == states.waiting){
             document.getElementById('form').style.display = 'none';
             document.getElementById('waiting').style.display = 'block';
+            document.getElementById('game-canvas').style.display = 'none';
             document.getElementById('finished').style.display = 'none';
 
             gameTitlesE = document.getElementsByClassName('js-game-name');
@@ -86,13 +96,20 @@
             }
         }
         // game finished (for one reason or another)
-        if (gdt.state == states.finished){
+        else if (gdt.state == states.finished){
             document.getElementById('form').style.display = 'none';
             document.getElementById('waiting').style.display = 'none';
+            document.getElementById('game-canvas').style.display = 'none';
             document.getElementById('finished').style.display = 'block';
 
-            winnerName = document.getElementsById('winner-name');
+            winnerName = document.getElementById('winner-name');
             winnerName.innerHTML = gdt.winner;
+        }
+        else if (gdt.state == states.game_on){
+            document.getElementById('form').style.display = 'none';
+            document.getElementById('waiting').style.display = 'none';
+            document.getElementById('game-canvas').style.display = 'block';
+            document.getElementById('finished').style.display = 'none';
         }
     };
 })();
