@@ -17,11 +17,16 @@ FIELD_TYPES = {
 
 class World(object):
 
-    def __init__(self, size=(25, 25)):
+    def __init__(self, players, size=(25, 25)):
         self.x_size, self.y_size = size
 
         self.map = []
         self.generate_random_map()
+
+        self.players = players
+        start_position = self.get_start_position()
+        for p in players.values():
+            p.set_position(start_position)
 
     def generate_random_map(self):
         map_ = []
@@ -32,11 +37,14 @@ class World(object):
                 row.append(next(rfi))
             map_.append(row)
         # add start and finish fields
-        middle_row_idx = int((self.y_size + 1) / 2)
+        middle_row_idx, _ = self.get_start_position()
         map_[middle_row_idx][0] = 'start'
         map_[middle_row_idx][self.x_size - 1] = 'finish'
         # set map
         self.map = map_
+
+    def get_start_position(self):
+        return [int((self.y_size + 1) / 2), 0]
 
     @staticmethod
     def get_random_field_iterator():
