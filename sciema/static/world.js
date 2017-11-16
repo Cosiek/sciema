@@ -1,5 +1,7 @@
 class World  {
     constructor(worldData){
+        this.tileSize = 50;
+
         this.fieldTypes = worldData.field_types;
         this.map = [];
         this.createFields(worldData.size);
@@ -12,7 +14,7 @@ class World  {
         while (mapContainerDiv.firstChild) {
             mapContainerDiv.removeChild(mapContainerDiv.firstChild);
         }
-        mapContainerDiv.style.width = 50 * size[0] + 'px';
+        mapContainerDiv.style.width = '' + this.tileSize * size[0] + 'px';
         // make sure map is empty
         this.map = [];
         // add fields to container and underlying data array
@@ -22,8 +24,8 @@ class World  {
             let x = size[0];
             while (x > 0){
                 let field = document.createElement('div');
-                field.style.width = '50px';
-                field.style.height = '50px';
+                field.style.width = this.tileSize + 'px';
+                field.style.height = this.tileSize + 'px';
                 field.style.display = 'inline-block';
                 row.push(field);
                 mapContainerDiv.appendChild(field);
