@@ -7,6 +7,7 @@ class Player(object):
     def __init__(self, name, connection):
         self.name = name
         self.connection = connection
+        self.connection.player_name = name
         self.connected = True
 
     def to_dct(self):

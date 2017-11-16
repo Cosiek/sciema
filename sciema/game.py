@@ -32,12 +32,12 @@ class Game(object):
             connection.err('Player name already taken')
             return False
         # set data
-        connection.player_name = data['player']
         self.players[data['player']] = Player(data['player'], connection)
         connection.game = self
         return True
 
     def player_disconnected(self, connection):
+        # TODO
         pass
 
     def handle_action(self, data, connection):
