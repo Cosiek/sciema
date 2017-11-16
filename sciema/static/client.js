@@ -110,6 +110,8 @@
             document.getElementById('waiting').style.display = 'none';
             document.getElementById('game-canvas').style.display = 'block';
             document.getElementById('finished').style.display = 'none';
+
+            game.world = new World(gdt.world);
         }
     };
 })();
