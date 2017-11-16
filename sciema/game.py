@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 from player import Player
+from world import World
 
 
 class Game(object):
@@ -17,6 +18,7 @@ class Game(object):
         self.players = {}
 
         self.state = self.states.waiting
+        self.world = None
 
     def add_player(self, connection, data):
         # validate data
@@ -45,7 +47,10 @@ class Game(object):
                 connection.err("Only the owner can run a game")
                 return False
             self.state = self.states.game_on
-            return self.get_game_state()
+            self.world = World()
+            response = self.get_game_state()
+            response['world'] = self.world.to_dct()
+            return response
         elif data['action'] == 'end-game':
             if not connection is self.owner:
                 connection.err("Only the owner can finish a game")
