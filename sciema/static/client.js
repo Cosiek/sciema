@@ -111,7 +111,7 @@
             document.getElementById('game-canvas').style.display = 'block';
             document.getElementById('finished').style.display = 'none';
 
-            game.world = new World(gdt.world);
+            game.world = new World(gdt.world, gdt.players);
         }
     };
 })();
