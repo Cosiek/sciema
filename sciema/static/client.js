@@ -1,7 +1,7 @@
 (function () {
     var states = {'waiting': 'waiting', 'game_on': 'game_on',
-                  'finished': 'finished',}
-    var game = {}
+                  'finished': 'finished', 'game_start': 'game_start'}
+    var game = {'state': states.waiting}
     var ws = new WebSocket('ws://127.0.0.1:8888/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
@@ -55,6 +55,19 @@
         }));
     })
 
+    // bind arrow keys --------------------------------------------------------
+
+    document.addEventListener('keypress', (event) => {
+        if (game.state != states.game_on){return null}
+        dct = {'game': game.name, 'player': game.player}
+        if (event.key === 'ArrowUp'){dct['action'] = 'up'}
+        else if (event.key === 'ArrowDown'){dct['action'] = 'down'}
+        else if (event.key === 'ArrowLeft'){dct['action'] = 'left'}
+        else if (event.key === 'ArrowRight'){dct['action'] = 'right'}
+        ws.send(JSON.stringify(dct))
+    });
+
+
     // handle return messages -------------------------------------------------
 
     ws.onmessage = function(event){
@@ -67,6 +80,9 @@
                 alert(err)
             }
         }
+
+        // update game state
+        if (gdt.state){game.state = gdt.state}
 
         // waiting for players
         if (gdt.state == states.waiting){
@@ -105,13 +121,24 @@
             winnerName = document.getElementById('winner-name');
             winnerName.innerHTML = gdt.winner;
         }
-        else if (gdt.state == states.game_on){
+        else if (gdt.state == states.game_start){
             document.getElementById('form').style.display = 'none';
             document.getElementById('waiting').style.display = 'none';
             document.getElementById('game-canvas').style.display = 'block';
             document.getElementById('finished').style.display = 'none';
 
             game.world = new World(gdt.world, gdt.players);
+            game.state = states.game_on;
+        }
+        else if (gdt.state == states.game_on){
+            if (gdt.action == 'move'){
+                // convert response to something i might feed to `updatePlayers`
+                dt = [{'name': gdt.player, 'position': gdt.position}];
+                // move his sprite
+                game.world.updatePlayers(dt);
+                // notify server, that this move is complete
+                // TODO
+            }
         }
     };
 })();

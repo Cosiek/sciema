@@ -90,8 +90,8 @@ class World  {
                            || curr.position[1] != player.position[1]))){
                     // calculate new position
                     let pos = this.getPlayerCoordinates(player.position)
-                    player.sprite.style.left = pos[0] + 'px';
-                    player.sprite.style.top = pos[1] + 'px';
+                    curr.sprite.style.left = pos[0] + 'px';
+                    curr.sprite.style.top = pos[1] + 'px';
                 }
             }
         }
