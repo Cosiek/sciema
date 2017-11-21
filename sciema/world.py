@@ -58,6 +58,44 @@ class World(object):
             for field_name in poll:
                 yield field_name
 
+    def is_valid_move(self, player, direction):
+        # calculate requested position
+        requested_pos = player.position.copy()
+        if direction == 'up':
+            requested_pos[0] -= 1
+        elif direction == 'down':
+            requested_pos[0] += 1
+        elif direction == 'left':
+            requested_pos[1] -= 1
+        elif direction == 'right':
+            requested_pos[1] += 1
+        # check walking outside of world
+        if (requested_pos[0] < 0 or self.x_size < requested_pos[0] or
+                requested_pos[1] < 0 or self.y_size < requested_pos[1]):
+            return False, player.position
+        # get fields at positions
+        curr_field = self.map[player.position[0]][player.position[1]]
+        next_field = self.map[requested_pos[0]][requested_pos[1]]
+        # run data through fields validation function
+        validation_f = self.get_move_validation_function(curr_field, next_field)
+
+        kwargs = {
+            'world': self,
+            'player': player,
+            'curr_field': curr_field,
+            'next_field': next_field,
+            'requested_pos': requested_pos,
+            'direction': direction
+        }
+        return validation_f(**kwargs)
+
+    def get_move_validation_function(self, curr_field, next_field):
+        # TODO: get right function depending on fields
+        def always_true(*args, **kwargs):
+            return True, kwargs['requested_pos']
+
+        return always_true
+
     def to_dct(self):
         return {
             'size': (self.x_size, self.y_size),

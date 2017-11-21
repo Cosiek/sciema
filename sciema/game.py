@@ -62,6 +62,16 @@ class Game(object):
             state = self.get_game_state()
             state['winner'] = connection.player_name
             return True, state
+        elif data['action'] in ('up', 'down', 'right', 'left'):
+            player = self.players[connection.player_name]
+            is_valid, position = self.world.is_valid_move(player, data['action'])
+            response = {
+                'player': player.name,
+                'action': 'move',
+                'position': position,
+                'state': self.state,
+            }
+            return is_valid, response
 
     def get_game_state(self):
         return {
