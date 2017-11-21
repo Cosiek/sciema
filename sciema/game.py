@@ -9,6 +9,7 @@ class Game(object):
 
     class states:
         waiting = 'waiting'
+        game_start = 'game_start'
         game_on = 'game_on'
         finished = 'finished'
 
@@ -45,20 +46,22 @@ class Game(object):
         if data['action'] == 'run_game':
             if not connection is self.owner:
                 connection.err("Only the owner can run a game")
-                return False
-            self.state = self.states.game_on
+                return False, False
+            self.state = self.states.game_start
             self.world = World(self.players)
             response = self.get_game_state()
             response['world'] = self.world.to_dct()
-            return response
+
+            self.state = self.states.game_on
+            return True,response
         elif data['action'] == 'end-game':
             if not connection is self.owner:
                 connection.err("Only the owner can finish a game")
-                return False
+                return False, False
             self.state = self.states.finished
             state = self.get_game_state()
             state['winner'] = connection.player_name
-            return state
+            return True, state
 
     def get_game_state(self):
         return {
