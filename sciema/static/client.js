@@ -1,8 +1,8 @@
 (function () {
     var states = {'waiting': 'waiting', 'game_on': 'game_on',
                   'finished': 'finished', 'game_start': 'game_start'}
-    var game = {'state': states.waiting}
-    var ws = new WebSocket('ws://127.0.0.1:8888/websocket');
+    var game = {'state': states.waiting, waitingForResponse: false}
+    var ws = new WebSocket('ws://' + location.host + '/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
 
