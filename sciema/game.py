@@ -72,6 +72,15 @@ class Game(object):
                 'state': self.state,
             }
             return is_valid, response
+        elif data['action'] == 'move-confirm':
+            player = self.players[connection.player_name]
+            position = self.world.settle(player)
+            response = {
+                'player': player.name,
+                'action': 'settle',
+                'state': self.state,
+            }
+            return True, response
 
     def get_game_state(self):
         return {

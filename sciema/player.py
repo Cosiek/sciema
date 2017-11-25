@@ -3,6 +3,7 @@
 
 from collections import deque
 
+
 class Player(object):
 
     def __init__(self, name, connection):
@@ -11,7 +12,15 @@ class Player(object):
         self.connection.player_name = name
         self.connected = True
 
+        self.requested_position = None  # indicates if player is on the move
         self.history = deque(maxlen=5)
+
+    def request_position(self, position):
+        self.requested_position = position
+
+    def settle(self):
+        self.set_position(self.requested_position)
+        self.requested_position = None
 
     def set_position(self, position):
         self.history.append(position)

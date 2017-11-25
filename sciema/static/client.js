@@ -137,7 +137,9 @@
                 // move his sprite
                 game.world.updatePlayers(dt);
                 // notify server, that this move is complete
-                // TODO
+                ws.send(JSON.stringify({'action': 'move-confirm',
+                    'game': game.name, 'player': game.player
+                }));
             }
         }
     };

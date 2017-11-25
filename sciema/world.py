@@ -87,7 +87,10 @@ class World(object):
             'requested_pos': requested_pos,
             'direction': direction
         }
-        return validation_f(**kwargs)
+        is_valid, position = validation_f(**kwargs)
+        if is_valid:
+            player.request_position(position)
+        return is_valid, position
 
     def get_move_validation_function(self, curr_field, next_field):
         # TODO: get right function depending on fields
@@ -95,6 +98,13 @@ class World(object):
             return True, kwargs['requested_pos']
 
         return always_true
+
+    def settle(self, player):
+        """
+        Mark that player reached his position after move
+        """
+        player.settle()
+
 
     def to_dct(self):
         return {
