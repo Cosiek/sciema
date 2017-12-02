@@ -59,6 +59,8 @@ class World(object):
                 yield field_name
 
     def is_valid_move(self, player, direction):
+        if player.is_moving:
+            return False, player.requested_position
         # calculate requested position
         requested_pos = player.position.copy()
         if direction == 'up':
@@ -104,6 +106,7 @@ class World(object):
         Mark that player reached his position after move
         """
         player.settle()
+        return player.position
 
 
     def to_dct(self):

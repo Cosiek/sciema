@@ -26,6 +26,10 @@ class Player(object):
         self.history.append(position)
 
     @property
+    def is_moving(self):
+        return self.requested_position is not None
+
+    @property
     def position(self):
         return self.history[-1] if self.history else None
 

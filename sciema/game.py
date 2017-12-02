@@ -79,6 +79,7 @@ class Game(object):
                 'player': player.name,
                 'action': 'settle',
                 'state': self.state,
+                'position': position,
             }
             return True, response
 
