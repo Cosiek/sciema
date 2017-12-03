@@ -72,8 +72,8 @@ class World(object):
         elif direction == 'right':
             requested_pos[1] += 1
         # check walking outside of world
-        if (requested_pos[0] < 0 or self.x_size < requested_pos[0] or
-                requested_pos[1] < 0 or self.y_size < requested_pos[1]):
+        if (requested_pos[0] < 0 or self.x_size <= requested_pos[0] or
+                requested_pos[1] < 0 or self.y_size <= requested_pos[1]):
             return False, player.position
         # get fields at positions
         curr_field = self.map[player.position[0]][player.position[1]]

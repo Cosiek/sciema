@@ -76,7 +76,7 @@
 
     ws.onmessage = function(event){
         gdt = JSON.parse(event.data);
-        console.log(gdt);
+        console.log('server: ', gdt);
 
         // handling errors
         if (gdt.errors){
@@ -146,7 +146,6 @@
                     'game': game.name, 'player': game.player
                 }));
             } else if (gdt.action == 'settle'){
-                console.log(gdt)
                 // convert response to something i might feed to `updatePlayers`
                 dt = [{'name': gdt.player, 'position': gdt.position}];
                 // move his sprite

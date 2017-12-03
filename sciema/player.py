@@ -23,7 +23,8 @@ class Player(object):
         self.requested_position = None
 
     def set_position(self, position):
-        self.history.append(position)
+        if position is not None:
+            self.history.append(position)
 
     @property
     def is_moving(self):
