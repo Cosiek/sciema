@@ -1,5 +1,5 @@
 class World  {
-    constructor(worldData, players){
+    constructor(worldData, players, currentPlayerName){
         this.tileSize = 50;
         this.playerSpriteSize = 30;
 
@@ -10,7 +10,9 @@ class World  {
 
         this.players = {};
         this.createPlayers(players);
+        this.currentPlayer = this.players[currentPlayerName]
         this.updatePlayers(players, true);
+
     }
 
     createFields(size){
@@ -95,6 +97,12 @@ class World  {
                 }
             }
         }
+        // center map on current player
+        let x = this.currentPlayer.sprite.style.left.replace('px', '');
+        let y = this.currentPlayer.sprite.style.top.replace('px', '');
+        x = Number(x) - screen.availWidth / 2;
+        y = Number(y) - screen.availHeight / 2;
+        window.scrollTo(x, y);
     }
 
     getPlayerCoordinates(position){
