@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+from itertools import permutations
+from random import choice, shuffle
 
-from random import shuffle
-
+from move_validation import VALIDATORS
 
 FIELD_TYPES = {
     'start': {'color': (255, 255, 255), 'possible': 0},
@@ -22,6 +23,9 @@ class World(object):
 
         self.map = []
         self.generate_random_map()
+
+        self.move_validation_rules = {}
+        self.set_move_validation_rules()
 
         self.players = players
         start_position = self.get_start_position()
@@ -95,11 +99,8 @@ class World(object):
         return is_valid, position
 
     def get_move_validation_function(self, curr_field, next_field):
-        # TODO: get right function depending on fields
-        def always_true(*args, **kwargs):
-            return True, kwargs['requested_pos']
-
-        return always_true
+        """ get right function depending on fields """
+        return self.move_validation_rules[(curr_field, next_field)]
 
     def settle(self, player):
         """
@@ -108,6 +109,9 @@ class World(object):
         player.settle()
         return player.position
 
+    def set_move_validation_rules(self):
+        for couple in permutations(FIELD_TYPES.keys(), 2):
+            self.move_validation_rules[couple] = choice(VALIDATORS)
 
     def to_dct(self):
         return {

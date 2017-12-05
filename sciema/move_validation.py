@@ -17,6 +17,9 @@ kwargs = {
 }
 """
 
+# NOTE: keep all functions that should be used for move validation
+# below this statement
+imported = set(dir())
 
 def always_true(*args, **kwargs):
     return True, kwargs['requested_pos']
@@ -76,3 +79,9 @@ def keep_off_the_grass(*args, **kwargs):
     if kwargs['next_field'] == 'grass':
         return always_false(*args, **kwargs)
     return always_true(*args, **kwargs)
+
+# NOTE: keep all functions that should be used for move validation
+# above this statement
+_validator_names = set(dir()) - imported - set(('imported',))
+_locals = locals()
+VALIDATORS = [_locals[vn] for vn in _validator_names]
