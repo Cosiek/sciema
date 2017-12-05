@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from itertools import permutations
+from itertools import product
 from random import choice, shuffle
 
 from move_validation import VALIDATORS
@@ -100,6 +100,7 @@ class World(object):
 
     def get_move_validation_function(self, curr_field, next_field):
         """ get right function depending on fields """
+        print(curr_field, next_field, self.move_validation_rules[(curr_field, next_field)])
         return self.move_validation_rules[(curr_field, next_field)]
 
     def settle(self, player):
@@ -110,8 +111,9 @@ class World(object):
         return player.position
 
     def set_move_validation_rules(self):
-        for couple in permutations(FIELD_TYPES.keys(), 2):
+        for couple in product(FIELD_TYPES.keys(), repeat=2):
             self.move_validation_rules[couple] = choice(VALIDATORS)
+        print(self.move_validation_rules.keys())
 
     def to_dct(self):
         return {
