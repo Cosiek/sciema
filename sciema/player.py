@@ -14,6 +14,7 @@ class Player(object):
 
         self.requested_position = None  # indicates if player is on the move
         self.history = deque(maxlen=5)
+        self.is_winner = False
 
     def request_position(self, position):
         self.requested_position = position
@@ -36,4 +37,4 @@ class Player(object):
 
     def to_dct(self):
         return {'name': self.name, 'connected': self.connected,
-                'position': self.position}
+                'position': self.position, 'is_winner':self.is_winner}

@@ -32,5 +32,6 @@ SETTLE_ACTIONS = [_locals[vn] for vn in _validator_names]
 
 
 def finish_off(*args, **kwargs):
-    print("This is the end!")
+    kwargs['world'].game.state = kwargs['world'].game.states.finished
+    kwargs['player'].is_winner = True
     return do_nothing(*args, **kwargs)

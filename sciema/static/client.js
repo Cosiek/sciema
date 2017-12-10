@@ -122,8 +122,13 @@
             document.getElementById('game-canvas').style.display = 'none';
             document.getElementById('finished').style.display = 'block';
 
-            winnerName = document.getElementById('winner-name');
-            winnerName.innerHTML = gdt.winner;
+            winnerName = 'No winners here :(';
+            for (ple of gdt.players){
+                console.log(ple);
+                if (ple.is_winner) {winnerName = ple.name;break}
+            }
+
+            document.getElementById('winner-name').innerHTML = winnerName;
         }
         else if (gdt.state == states.game_start){
             document.getElementById('form').style.display = 'none';

@@ -60,7 +60,6 @@ class Game(object):
                 return False, False
             self.state = self.states.finished
             state = self.get_game_state()
-            state['winner'] = connection.player_name
             return True, state
         elif data['action'] in ('up', 'down', 'right', 'left'):
             player = self.players[connection.player_name]
@@ -75,12 +74,10 @@ class Game(object):
         elif data['action'] == 'move-confirm':
             player = self.players[connection.player_name]
             position = self.world.settle(player)
-            response = {
-                'player': player.name,
-                'action': 'settle',
-                'state': self.state,
-                'position': position,
-            }
+            response = self.get_game_state()
+            response['player'] = player.name
+            response['action'] = 'settle'
+            response['position'] = position
             return True, response
 
     def get_game_state(self):
