@@ -97,7 +97,7 @@
 
             gameTitlesE = document.getElementsByClassName('js-game-name');
             for (gte of gameTitlesE){
-                gte.innerHTML = gdt.name;
+                gte.textContent = gdt.name;
             }
 
             playersListE = document.getElementsByClassName('js-players-list');
@@ -107,9 +107,9 @@
                 }
                 for (playerDct of gdt.players){
                     li = document.createElement("li");
-                    li.innerHTML = playerDct.name;
+                    li.textContent = playerDct.name;
                     if (playerDct.name == gdt.owner){
-                        li.innerHTML += ' (owner)'
+                        li.textContent += ' (owner)'
                     }
                     ple.appendChild(li);
                 }
@@ -128,7 +128,7 @@
                 if (ple.is_winner) {winnerName = ple.name;break}
             }
 
-            document.getElementById('winner-name').innerHTML = winnerName;
+            document.getElementById('winner-name').textContent = winnerName;
         }
         else if (gdt.state == states.game_start){
             document.getElementById('form').style.display = 'none';
