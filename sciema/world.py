@@ -19,7 +19,7 @@ FIELD_TYPES = {
 
 class World(object):
 
-    def __init__(self, players, size=(25, 25)):
+    def __init__(self, game, size=(25, 25)):
         self.x_size, self.y_size = size
 
         self.map = []
@@ -30,9 +30,11 @@ class World(object):
         self.settle_actions = {}
         self.set_settle_actions()
 
-        self.players = players
+        self.game = game
+
+        self.players = game.players
         start_position = self.get_start_position()
-        for p in players.values():
+        for p in self.players.values():
             p.set_position(start_position)
 
     def generate_random_map(self):

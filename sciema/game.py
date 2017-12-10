@@ -48,7 +48,7 @@ class Game(object):
                 connection.err("Only the owner can run a game")
                 return False, False
             self.state = self.states.game_start
-            self.world = World(self.players)
+            self.world = World(self)
             response = self.get_game_state()
             response['world'] = self.world.to_dct()
 
