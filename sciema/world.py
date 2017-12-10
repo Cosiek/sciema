@@ -124,7 +124,6 @@ class World(object):
     def set_move_validation_rules(self):
         for couple in product(FIELD_TYPES.keys(), repeat=2):
             self.move_validation_rules[couple] = choice(VALIDATORS)
-        print(self.move_validation_rules.keys())
 
     def set_settle_actions(self):
         for field_type in FIELD_TYPES.keys():

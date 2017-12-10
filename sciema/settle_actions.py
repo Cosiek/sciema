@@ -20,7 +20,6 @@ imported = set(dir())
 
 
 def do_nothing(*args, **kwargs):
-    print("I ain't do nuthin!")
     return kwargs['player'].position
 
 

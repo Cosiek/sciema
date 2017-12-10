@@ -124,7 +124,6 @@
 
             winnerName = 'No winners here :(';
             for (ple of gdt.players){
-                console.log(ple);
                 if (ple.is_winner) {winnerName = ple.name;break}
             }
 

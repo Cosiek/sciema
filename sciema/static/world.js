@@ -18,7 +18,6 @@ class World  {
     createFields(size){
         // get and clear map container
         let mapContainerDiv = document.getElementById('map-container');
-        //mapContainerDiv.style.position = 'relative';
         while (mapContainerDiv.firstChild) {
             mapContainerDiv.removeChild(mapContainerDiv.firstChild);
         }
