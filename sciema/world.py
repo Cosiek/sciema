@@ -5,6 +5,7 @@ from itertools import product
 from random import choice, shuffle
 
 from move_validation import VALIDATORS
+from settle_actions import finish_off, SETTLE_ACTIONS
 
 FIELD_TYPES = {
     'start': {'color': (255, 255, 255), 'possible': 0},
@@ -26,6 +27,8 @@ class World(object):
 
         self.move_validation_rules = {}
         self.set_move_validation_rules()
+        self.settle_actions = {}
+        self.set_settle_actions()
 
         self.players = players
         start_position = self.get_start_position()
@@ -100,7 +103,6 @@ class World(object):
 
     def get_move_validation_function(self, curr_field, next_field):
         """ get right function depending on fields """
-        print(curr_field, next_field, self.move_validation_rules[(curr_field, next_field)])
         return self.move_validation_rules[(curr_field, next_field)]
 
     def settle(self, player):
@@ -108,12 +110,24 @@ class World(object):
         Mark that player reached his position after move
         """
         player.settle()
-        return player.position
+        # get a reaction
+        curr_field = self.map[player.position[0]][player.position[1]]
+        settle_f = self.get_settle_function(curr_field)
+        return settle_f(world=self, player=player, curr_field=curr_field)
+
+    def get_settle_function(self, field_name):
+        """ get right function depending on field """
+        return self.settle_actions[field_name]
 
     def set_move_validation_rules(self):
         for couple in product(FIELD_TYPES.keys(), repeat=2):
             self.move_validation_rules[couple] = choice(VALIDATORS)
         print(self.move_validation_rules.keys())
+
+    def set_settle_actions(self):
+        for field_type in FIELD_TYPES.keys():
+            self.settle_actions[field_type] = choice(SETTLE_ACTIONS)
+        self.settle_actions['finish'] = finish_off
 
     def to_dct(self):
         return {
