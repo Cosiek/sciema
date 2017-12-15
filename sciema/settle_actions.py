@@ -20,7 +20,11 @@ imported = set(dir())
 
 
 def do_nothing(*args, **kwargs):
-    return kwargs['player'].position
+    return
+
+
+def back_to_begining(*args, **kwargs):
+    kwargs['player'].set_position(kwargs['world'].get_start_position())
 
 
 # NOTE: keep all functions that should be used for move validation
