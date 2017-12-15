@@ -105,6 +105,8 @@ class World(object):
 
     def get_move_validation_function(self, curr_field, next_field):
         """ get right function depending on fields """
+        from move_validation import always_true
+        return always_true
         return self.move_validation_rules[(curr_field, next_field)]
 
     def settle(self, player):
