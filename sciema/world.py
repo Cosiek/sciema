@@ -115,7 +115,7 @@ class World(object):
         # get a reaction
         curr_field = self.map[player.position[0]][player.position[1]]
         settle_f = self.get_settle_function(curr_field)
-        return settle_f(world=self, player=player, curr_field=curr_field)
+        settle_f(world=self, player=player, curr_field=curr_field)
 
     def get_settle_function(self, field_name):
         """ get right function depending on field """

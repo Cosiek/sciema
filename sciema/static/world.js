@@ -15,6 +15,11 @@ class World  {
 
     }
 
+    update(worldData, players){
+        this.paintFields(worldData.map);
+        this.updatePlayers(players);
+    }
+
     createFields(size){
         // get and clear map container
         let mapContainerDiv = document.getElementById('map-container');

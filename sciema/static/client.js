@@ -60,12 +60,9 @@
     document.addEventListener('keypress', (event) => {
         if (game.state != states.game_on || game.waitingForResponse){return null}
         dct = {'game': game.name, 'player': game.player}
-        send = false;
-        if (event.key === 'ArrowUp'){dct['action'] = 'up'; send = true}
-        else if (event.key === 'ArrowDown'){dct['action'] = 'down'; send = true}
-        else if (event.key === 'ArrowLeft'){dct['action'] = 'left'; send = true}
-        else if (event.key === 'ArrowRight'){dct['action'] = 'right'; send = true}
-        if (send){
+        action = {'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right'}[event.key];
+        if (action){
+            dct['action'] = action;
             game.waitingForResponse = true;
             ws.send(JSON.stringify(dct));
         }
@@ -150,10 +147,8 @@
                     'game': game.name, 'player': game.player
                 }));
             } else if (gdt.action == 'settle'){
-                // convert response to something i might feed to `updatePlayers`
-                dt = [{'name': gdt.player, 'position': gdt.position}];
-                // move his sprite
-                game.world.updatePlayers(dt);
+                // update players
+                game.world.update(gdt.world, gdt.players);
                 // mark that this player can move again
                 if (gdt.player == game.player){
                     game.waitingForResponse = false;
