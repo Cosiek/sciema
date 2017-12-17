@@ -99,6 +99,7 @@ class World  {
                     curr.sprite.style.left = pos[0] + 'px';
                     curr.sprite.style.top = pos[1] + 'px';
                 }
+                curr[attr] = player[attr];
             }
         }
         // center map on current player
