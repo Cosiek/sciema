@@ -107,7 +107,7 @@ class World  {
         let y = this.currentPlayer.sprite.style.top.replace('px', '');
         x = Number(x) - screen.availWidth / 2;
         y = Number(y) - screen.availHeight / 2;
-        window.scrollTo(x, y);
+        window.scroll({top: y, left: x, behavior: 'smooth'});
     }
 
     getPlayerCoordinates(position){
