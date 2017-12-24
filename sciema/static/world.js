@@ -73,6 +73,7 @@ class World  {
         for (let player of players){
             // crate sprite
             player.sprite = document.createElement('div');
+            player.sprite.classList.add('player-sprite')
             mapContainerDiv.insertBefore(player.sprite, mapContainerDiv.firstChild);
             // change its appearance
             player.sprite.style.height = this.playerSpriteSize + 'px';
