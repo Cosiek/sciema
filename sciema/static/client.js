@@ -143,9 +143,11 @@
                 game.world.updatePlayers(dt);
                 // notify server, that this move is complete
                 game.waitingForResponse = true;
-                ws.send(JSON.stringify({'action': 'move-confirm',
-                    'game': game.name, 'player': game.player
-                }));
+                setTimeout(function(){
+                    ws.send(JSON.stringify({'action': 'move-confirm',
+                        'game': game.name, 'player': game.player
+                    }));
+                }, 1000);
             } else if (gdt.action == 'settle'){
                 // update players
                 game.world.update(gdt.world, gdt.players);
