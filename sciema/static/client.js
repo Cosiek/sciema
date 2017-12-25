@@ -58,14 +58,13 @@
     // bind arrow keys --------------------------------------------------------
 
     document.addEventListener('keypress', (event) => {
-        if (game.state != states.game_on || game.waitingForResponse){return null}
-        dct = {'game': game.name, 'player': game.player}
         action = {'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right'}[event.key];
-        if (action){
-            dct['action'] = action;
-            game.waitingForResponse = true;
-            ws.send(JSON.stringify(dct));
-        }
+        if (!action || game.state != states.game_on){return null}
+        event.preventDefault();
+        if (game.waitingForResponse){return null}
+        dct = {'game': game.name, 'player': game.player, 'action': action}
+        game.waitingForResponse = true;
+        ws.send(JSON.stringify(dct));
     });
 
 
