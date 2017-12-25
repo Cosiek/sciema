@@ -146,7 +146,7 @@
                     ws.send(JSON.stringify({'action': 'move-confirm',
                         'game': game.name, 'player': game.player
                     }));
-                }, 1000);
+                }, 900);
             } else if (gdt.action == 'settle'){
                 // update players
                 game.world.update(gdt.world, gdt.players);
