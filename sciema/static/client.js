@@ -103,10 +103,13 @@
                 }
                 for (playerDct of gdt.players){
                     li = document.createElement("li");
-                    li.textContent = playerDct.name;
+                    li.textContent = playerDct.name + ' ' + playerDct.look.icon;
                     if (playerDct.name == gdt.owner){
                         li.textContent += ' (owner)'
                     }
+                    color = playerDct.look.color;
+                    rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+                    li.style.color = rgb;
                     ple.appendChild(li);
                 }
             }
