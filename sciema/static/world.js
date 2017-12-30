@@ -1,7 +1,7 @@
 class World  {
     constructor(worldData, players, currentPlayerName){
         this.tileSize = 50;
-        this.playerSpriteSize = 30;
+        this.spriteSize = 24;
 
         this.fieldTypes = worldData.field_types;
         this.map = [];
@@ -76,10 +76,17 @@ class World  {
             player.sprite.classList.add('player-sprite')
             mapContainerDiv.insertBefore(player.sprite, mapContainerDiv.firstChild);
             // change its appearance
-            player.sprite.style.height = this.playerSpriteSize + 'px';
-            player.sprite.style.width = this.playerSpriteSize + 'px';
-            player.sprite.style.background = 'yellow';
-            player.sprite.textContent = player['name'];
+            player.sprite.textContent = player['look']['icon'];
+            player.sprite.style.height = this.spriteSize + 'px';
+            player.sprite.style.width = this.spriteSize + 'px';
+            player.sprite.style.display = 'table-cell';
+            player.sprite.style['vertical-align'] = 'middle';
+            player.sprite.style['text-align'] = 'center';
+            let color = player['look']['color']
+            let rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
+            player.sprite.style.color = rgb;
+            rgb = 'rgb(' + (255 - color[0]) + ',' + (255 - color[1]) + ',' + (255 - color[2]) + ')'
+            player.sprite.style.background = rgb;
             // and set positioning
             player.sprite.style.display = 'inline-block';
             player.sprite.style.position = 'absolute';
@@ -113,6 +120,9 @@ class World  {
 
     getPlayerCoordinates(position){
         let rect = this.map[position[0]][position[1]].getBoundingClientRect();
-        return [window.scrollX + rect.left, window.scrollY + rect.top];
+        let off = this.tileSize / 2 - this.spriteSize / 2
+        let left = window.scrollX + rect.left + off;
+        let right = window.scrollY + rect.top + off;
+        return [left, right];
     }
 }
