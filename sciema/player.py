@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 from collections import deque
+from random import randint
 
 
 class Player(object):
@@ -15,6 +16,8 @@ class Player(object):
         self.requested_position = None  # indicates if player is on the move
         self.history = deque(maxlen=5)
         self.is_winner = False
+
+        self.look = self.get_new_look()
 
     def request_position(self, position):
         self.requested_position = position
@@ -37,4 +40,11 @@ class Player(object):
 
     def to_dct(self):
         return {'name': self.name, 'connected': self.connected,
-                'position': self.position, 'is_winner':self.is_winner}
+                'position': self.position, 'is_winner':self.is_winner,
+                'look': self.look}
+
+    def get_new_look(self):
+        return {
+            'color': (randint(0, 255), randint(0, 255), randint(0, 255)),
+            'icon': chr(randint(8192, 11263)),
+        }
