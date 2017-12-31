@@ -139,17 +139,27 @@
         }
         else if (gdt.state == states.game_on){
             if (gdt.action == 'move'){
+                // remember current player position to check if he really moved
+                var oldPosition = game.world.currentPlayer.position;
                 // convert response to something i might feed to `updatePlayers`
                 dt = [{'name': gdt.player, 'position': gdt.position}];
                 // move his sprite
                 game.world.updatePlayers(dt);
-                // notify server, that this move is complete
-                game.waitingForResponse = true;
-                setTimeout(function(){
-                    ws.send(JSON.stringify({'action': 'move-confirm',
-                        'game': game.name, 'player': game.player
-                    }));
-                }, 900);
+                if (gdt.player == game.world.currentPlayer.name){
+                    currPosition = game.world.currentPlayer.position;
+                    if (oldPosition[0] == currPosition[0] && oldPosition[1] == currPosition[1]){
+                        // don't block player if move wasn't allowed
+                        game.waitingForResponse = false;
+                        return null;
+                    }
+                    // notify server, that this move is complete
+                    game.waitingForResponse = true;
+                    setTimeout(function(){
+                        ws.send(JSON.stringify({'action': 'move-confirm',
+                            'game': game.name, 'player': game.player
+                        }));
+                    }, 1000);
+                }
             } else if (gdt.action == 'settle'){
                 // update players
                 game.world.update(gdt.world, gdt.players);
