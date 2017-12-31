@@ -27,6 +27,14 @@ def back_to_beginning(*args, **kwargs):
     kwargs['player'].set_position(kwargs['world'].get_start_position())
 
 
+def sent_others_to_beginning(*args, **kwargs):
+    world = kwargs['world']
+    start = world.get_start_position()
+    for player in world.players.values():
+        if player.name != kwargs['player'].name:
+            player.set_position(start)
+
+
 def mix_map(*args, **kwargs):
     kwargs['world'].generate_random_map()
 
@@ -76,6 +84,16 @@ def swap_start_and_finish(*args, **kwargs):
     middle_row_idx, _ = world.get_start_position()
     world.map[middle_row_idx][0] = 'finish'
     world.map[middle_row_idx][world.x_size - 1] = 'start'
+
+
+def go_back_in_time(*args, **kwargs):
+    player = kwargs['player']
+    player.set_position(player.history[0])
+
+
+def total_random(*args, **kwargs):
+    action = choice(SETTLE_ACTIONS)
+    return action(*args, **kwargs)
 
 
 # NOTE: keep all functions that should be used for move validation

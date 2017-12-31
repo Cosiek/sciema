@@ -80,6 +80,12 @@ def keep_off_the_grass(*args, **kwargs):
         return always_false(*args, **kwargs)
     return always_true(*args, **kwargs)
 
+
+def no_swimming(*args, **kwargs):
+    if kwargs['next_field'] == 'water':
+        return always_false(*args, **kwargs)
+    return always_true(*args, **kwargs)
+
 # NOTE: keep all functions that should be used for move validation
 # above this statement
 _validator_names = set(dir()) - imported - set(('imported',))
