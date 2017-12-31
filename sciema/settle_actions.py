@@ -96,6 +96,26 @@ def total_random(*args, **kwargs):
     return action(*args, **kwargs)
 
 
+def move_to_first_column(*args, **kwargs):
+    player = kwargs['player']
+    player.set_position([player.history[-1][0], 0])
+
+
+def move_to_first_row(*args, **kwargs):
+    player = kwargs['player']
+    player.set_position([0, player.history[-1][1]])
+
+
+def move_everyone_to_first_column(*args, **kwargs):
+    for player in kwargs['world'].players.values():
+        move_to_first_column(player=player)
+
+
+def move_everyone_to_first_row(*args, **kwargs):
+    for player in kwargs['world'].players.values():
+        move_to_first_row(player=player)
+
+
 # NOTE: keep all functions that should be used for move validation
 # above this statement
 _validator_names = set(dir()) - imported - set(('imported',))
