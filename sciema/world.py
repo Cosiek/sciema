@@ -9,10 +9,29 @@ from settle_actions import finish_off, SETTLE_ACTIONS
 
 FIELD_TYPES = {
     'start': {'color': (255, 255, 255), 'possible': 0},
-    'grass': {'color': (0, 255, 50), 'possible': 5},
-    'water': {'color': (0, 50, 252), 'possible': 5},
-    'lava': {'color': (255, 50, 50), 'possible': 1},
-    'rock': {'color': (200, 150, 150), 'possible': 1},
+    'green': {'color': (0, 255, 0), 'possible': 1},
+    'blue': {'color': (0, 0, 255), 'possible': 1},
+    'red': {'color': (255, 0, 0), 'possible': 1},
+    'grey': {'color': (200, 150, 150), 'possible': 1},
+    'yellow': {'color': (255, 255, 0), 'possible': 1},
+    'orange': {'color': (255, 128, 0), 'possible': 1},
+    'pink': {'color': (255, 192, 203), 'possible': 1},
+    'raspberry': {'color': (135, 38, 87), 'possible': 1},
+    'plum': {'color': (221, 160, 221), 'possible': 1},
+    'purple': {'color': (128, 0, 128), 'possible': 1},
+    'slateblue': {'color': (106, 90, 205), 'possible': 1},
+    'navy': {'color': (0, 0, 128), 'possible': 1},
+    'dodgerblue': {'color': (30, 144, 255), 'possible': 1},
+    'lightblue': {'color': (173, 216, 230), 'possible': 1},
+    'cyan': {'color': (0, 255, 255), 'possible': 1},
+    'mint': {'color': (189, 252, 201), 'possible': 1},
+    'cobaltgreen': {'color': (61, 145, 62), 'possible': 1},
+    'darkgreen': {'color': (0, 100, 0), 'possible': 1},
+    'khaki': {'color': (255, 215, 0), 'possible': 1},
+    'orangered': {'color': (255, 69, 0), 'possible': 1},
+    'snow': {'color': (255, 250, 250), 'possible': 1},
+    'silver': {'color': (255, 250, 250), 'possible': 1},
+
     'finish': {'color': (0, 0, 0), 'possible': 0},
 }
 

@@ -76,13 +76,13 @@ def only_horizontal(*args, **kwargs):
 
 
 def keep_off_the_grass(*args, **kwargs):
-    if kwargs['next_field'] == 'grass':
+    if kwargs['next_field'] == 'green':
         return always_false(*args, **kwargs)
     return always_true(*args, **kwargs)
 
 
 def no_swimming(*args, **kwargs):
-    if kwargs['next_field'] == 'water':
+    if kwargs['next_field'] == 'blue':
         return always_false(*args, **kwargs)
     return always_true(*args, **kwargs)
 
