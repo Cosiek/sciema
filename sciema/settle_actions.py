@@ -49,7 +49,7 @@ def change_settle_actions(*args, **kwargs):
 
 def swap_players_positions(*args, **kwargs):  # TODO - test with multiple players
     player1 = kwargs['player']
-    player_names = kwargs['world'].players.keys()
+    player_names = list(kwargs['world'].players.keys())
     player_names.remove(player1.name)
     if not player_names:
         return
