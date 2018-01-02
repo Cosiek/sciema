@@ -122,6 +122,9 @@ _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
 SETTLE_ACTIONS = [_locals[vn] for vn in _validator_names]
 
+for i in range(len(SETTLE_ACTIONS) * 4):
+    SETTLE_ACTIONS.append(do_nothing)
+
 
 def finish_off(*args, **kwargs):
     kwargs['world'].game.state = kwargs['world'].game.states.finished
