@@ -30,7 +30,6 @@ FIELD_TYPES = {
     'khaki': {'color': (255, 215, 0), 'possible': 1},
     'orangered': {'color': (255, 69, 0), 'possible': 1},
     'snow': {'color': (255, 250, 250), 'possible': 1},
-    'silver': {'color': (255, 250, 250), 'possible': 1},
 
     'finish': {'color': (0, 0, 0), 'possible': 0},
 }
