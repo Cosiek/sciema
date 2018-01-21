@@ -70,6 +70,13 @@
 
     // handle return messages -------------------------------------------------
 
+    writeMessage = function(msg){
+        if (msg.length === 0){return null}
+        var li = document.createElement('li');
+        li.appendChild(document.createTextNode(msg));
+        document.getElementById('message-container').appendChild(li);
+    }
+
     ws.onmessage = function(event){
         gdt = JSON.parse(event.data);
         console.log('server: ', gdt);
@@ -163,6 +170,7 @@
             } else if (gdt.action == 'settle'){
                 // update players
                 game.world.update(gdt.world, gdt.players);
+                writeMessage(gdt.msg);
                 // mark that this player can move again
                 if (gdt.player == game.player){
                     game.waitingForResponse = false;

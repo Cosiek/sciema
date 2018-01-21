@@ -73,11 +73,12 @@ class Game(object):
             return is_valid, response
         elif data['action'] == 'move-confirm':
             player = self.players[connection.player_name]
-            self.world.settle(player)
+            msg = self.world.settle(player)
             response = self.get_game_state()
             response['player'] = player.name
             response['action'] = 'settle'
             response['world'] = self.world.to_dct()
+            response['msg'] = msg
             return True, response
 
     def get_game_state(self):
