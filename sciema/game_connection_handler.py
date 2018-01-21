@@ -95,6 +95,18 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
                 elif response:
                     self.snd(response)
 
+                if response and response['state'] == 'finished':
+                    self.cleanup_game()
+
+    # cleaning up ---------------------
+
+    def cleanup_game(self):
+        # get rid of players
+        for player in self.game.players.values():
+            player.connection.close()
+        # remove game
+        GAMES.pop(self.game.name)
+
     # helpers -------------------------
 
     def err(self, message):
