@@ -21,6 +21,7 @@ kwargs = {
 # below this statement
 imported = set(dir())
 
+
 def always_true(*args, **kwargs):
     return True, kwargs['requested_pos']
 
@@ -91,3 +92,7 @@ def no_swimming(*args, **kwargs):
 _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
 VALIDATORS = [_locals[vn] for vn in _validator_names]
+
+APPROVE = [always_true, fifty_fifty,]
+DISAPPROVE = [always_false, bounce_back, skip_over]
+MOVE = [always_true, fifty_fifty, skip_over, bounce_back]

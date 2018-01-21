@@ -4,33 +4,33 @@
 from itertools import product
 from random import choice, shuffle
 
-from move_validation import VALIDATORS
-from settle_actions import finish_off, SETTLE_ACTIONS
+from move_validation import APPROVE, DISAPPROVE, MOVE, VALIDATORS
+from settle_actions import *
 
 FIELD_TYPES = {
-    'start': {'color': (255, 255, 255), 'possible': 0},
-    'green': {'color': (0, 255, 0), 'possible': 1},
-    'blue': {'color': (0, 0, 255), 'possible': 1},
-    'red': {'color': (255, 0, 0), 'possible': 1},
-    'grey': {'color': (200, 150, 150), 'possible': 1},
+    'green': {'color': (0, 255, 0), 'possible': 10},
+    'blue': {'color': (0, 0, 255), 'possible': 10},
+    #'red': {'color': (255, 0, 0), 'possible': 1},
+    #'grey': {'color': (200, 150, 150), 'possible': 1},
     'yellow': {'color': (255, 255, 0), 'possible': 1},
-    'orange': {'color': (255, 128, 0), 'possible': 1},
-    'pink': {'color': (255, 192, 203), 'possible': 1},
-    'raspberry': {'color': (135, 38, 87), 'possible': 1},
-    'plum': {'color': (221, 160, 221), 'possible': 1},
-    'purple': {'color': (128, 0, 128), 'possible': 1},
-    'slateblue': {'color': (106, 90, 205), 'possible': 1},
-    'navy': {'color': (0, 0, 128), 'possible': 1},
-    'dodgerblue': {'color': (30, 144, 255), 'possible': 1},
-    'lightblue': {'color': (173, 216, 230), 'possible': 1},
-    'cyan': {'color': (0, 255, 255), 'possible': 1},
-    'mint': {'color': (189, 252, 201), 'possible': 1},
-    'cobaltgreen': {'color': (61, 145, 62), 'possible': 1},
-    'darkgreen': {'color': (0, 100, 0), 'possible': 1},
-    'khaki': {'color': (255, 215, 0), 'possible': 1},
-    'orangered': {'color': (255, 69, 0), 'possible': 1},
-    'snow': {'color': (255, 250, 250), 'possible': 1},
+    #'orange': {'color': (255, 128, 0), 'possible': 1},
+    #'pink': {'color': (255, 192, 203), 'possible': 1},
+    #'raspberry': {'color': (135, 38, 87), 'possible': 1},
+    #'plum': {'color': (221, 160, 221), 'possible': 1},
+    #'purple': {'color': (128, 0, 128), 'possible': 1},
+    #'slateblue': {'color': (106, 90, 205), 'possible': 1},
+    #'navy': {'color': (0, 0, 128), 'possible': 1},
+    #'dodgerblue': {'color': (30, 144, 255), 'possible': 1},
+    #'lightblue': {'color': (173, 216, 230), 'possible': 1},
+    #'cyan': {'color': (0, 255, 255), 'possible': 1},
+    #'mint': {'color': (189, 252, 201), 'possible': 1},
+    #'cobaltgreen': {'color': (61, 145, 62), 'possible': 1},
+    #'darkgreen': {'color': (0, 100, 0), 'possible': 1},
+    #'khaki': {'color': (255, 215, 0), 'possible': 1},
+    #'orangered': {'color': (255, 69, 0), 'possible': 1},
+    #'snow': {'color': (255, 250, 250), 'possible': 1},
 
+    'start': {'color': (255, 255, 255), 'possible': 0},
     'finish': {'color': (0, 0, 0), 'possible': 0},
 }
 
@@ -141,12 +141,23 @@ class World(object):
 
     def set_move_validation_rules(self):
         for couple in product(FIELD_TYPES.keys(), repeat=2):
-            self.move_validation_rules[couple] = choice(VALIDATORS)
+            if couple[1] == 'finish':
+                self.move_validation_rules[couple] = choice(DISAPPROVE)
+            elif couple[0] == 'start' or couple[1] == 'yellow':
+                self.move_validation_rules[couple] = choice(APPROVE)
+            elif couple[0] == couple[1]:
+                self.move_validation_rules[couple] = choice(MOVE)
+            else:
+                self.move_validation_rules[couple] = choice(VALIDATORS)
 
     def set_settle_actions(self):
-        for field_type in FIELD_TYPES.keys():
-            self.settle_actions[field_type] = choice(SETTLE_ACTIONS)
+        #for field_type in FIELD_TYPES.keys():
+        #    self.settle_actions[field_type] = choice(SETTLE_ACTIONS)
+        self.settle_actions['start'] = do_nothing
+        self.settle_actions['green'] = do_nothing
+        self.settle_actions['blue'] = do_nothing
         self.settle_actions['finish'] = finish_off
+        self.settle_actions['yellow'] = total_random
 
     def to_dct(self):
         return {
