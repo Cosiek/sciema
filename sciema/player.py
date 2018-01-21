@@ -40,7 +40,7 @@ class Player(object):
 
     def to_dct(self):
         return {'name': self.name, 'connected': self.connected,
-                'position': self.position, 'is_winner':self.is_winner,
+                'position': self.position, 'is_winner': self.is_winner,
                 'look': self.look}
 
     def get_new_look(self):

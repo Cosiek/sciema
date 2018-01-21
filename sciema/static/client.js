@@ -118,6 +118,7 @@
                     color = playerDct.look.color;
                     rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                     li.style.color = rgb;
+                    li.classList.add("player-" + playerDct.name);
                     ple.appendChild(li);
                 }
             }

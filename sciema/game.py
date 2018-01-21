@@ -38,8 +38,9 @@ class Game(object):
         return True
 
     def player_disconnected(self, connection):
-        # TODO
-        pass
+        player = self.players.get(connection.player_name)
+        player.connected = False
+        player.connection = None
 
     def handle_action(self, data, connection):
         print(data)

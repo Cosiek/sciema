@@ -41,7 +41,6 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
         CLIENTS.remove(self)
         if self.game:
             self.game.player_disconnected(self)
-        print('Ucieczka!')
 
     def check_origin(self, origin):
         return True
@@ -103,7 +102,8 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def cleanup_game(self):
         # get rid of players
         for player in self.game.players.values():
-            player.connection.close()
+            if player.connected:
+                player.connection.close()
         # remove game
         GAMES.pop(self.game.name)
 
@@ -118,4 +118,5 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     def snd_a(self, data_dict):
         if self.game:
             for client in self.game.players.values():
-                client.connection.snd(data_dict)
+                if client.connected:
+                    client.connection.snd(data_dict)

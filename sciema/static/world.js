@@ -108,6 +108,11 @@ class World  {
                     curr.sprite.style.top = pos[1] + 'px';
                 }
                 curr[attr] = player[attr];
+                if (player.connected === false){
+                    for (li of document.getElementsByClassName("player-" + player.name)){
+                        li.style.textDecoration = 'line-through';
+                    }
+                }
             }
         }
         // center map on current player
