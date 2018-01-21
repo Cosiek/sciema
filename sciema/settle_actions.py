@@ -52,7 +52,7 @@ def change_settle_actions(*args, **kwargs):
     return u'{}: zmienił reguły obszarów'.format(kwargs['player'].name)
 
 
-def swap_players_positions(*args, **kwargs):  # TODO - test with multiple players
+def swap_players_positions(*args, **kwargs):
     player1 = kwargs['player']
     player_names = list(kwargs['world'].players.keys())
     player_names.remove(player1.name)
@@ -62,7 +62,7 @@ def swap_players_positions(*args, **kwargs):  # TODO - test with multiple player
     pos2 = player2.position
     player2.set_position(player1.position)
     player1.set_position(pos2)
-    return u'{} zamienił się pozycjami z '.format(player1.name, player2.name)
+    return u'{} zamienił się pozycjami z {}'.format(player1.name, player2.name)
 
 
 def hide_finish(*args, **kwargs):
