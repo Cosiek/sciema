@@ -74,7 +74,8 @@
         if (msg.length === 0){return null}
         var li = document.createElement('li');
         li.appendChild(document.createTextNode(msg));
-        document.getElementById('message-container').appendChild(li);
+        container = document.getElementById('message-container');
+        container.insertBefore(li, container.firstChild);
     }
 
     ws.onmessage = function(event){

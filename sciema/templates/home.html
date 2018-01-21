@@ -9,6 +9,16 @@
 				transition-property: left, top;
 				transition-duration: 1s;
 			}
+
+			#message-container {
+				position: fixed;
+				top: 0;
+				right: 0;
+				height: 100px;
+				overflow: auto;
+				width: 45%;
+				background-color: lightgray;
+			}
 		</style>
 	</head>
 	<body>
@@ -38,7 +48,7 @@
 		<div id="game-canvas" style="display: none">
 			<h3 class="js-game-name"></h3>
 			<ol class="js-players-list"></ol>
-			<ol id="message-container"></ol>
+			<ul id="message-container"></ul>
 			<div id="map-container"></div>
 			<button id="end-game">End game</button>
 		</div>
