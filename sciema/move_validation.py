@@ -35,6 +35,11 @@ def fifty_fifty(*args, **kwargs):
             else always_false(*args, **kwargs))
 
 
+def three_to_one(*args, **kwargs):
+    return (always_true(*args, **kwargs) if randint(0, 3)
+            else always_false(*args, **kwargs))
+
+
 def skip_over(*args, **kwargs):
     requested_pos = kwargs['requested_pos'].copy()
     direction = kwargs['direction']
@@ -93,6 +98,6 @@ _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
 VALIDATORS = [_locals[vn] for vn in _validator_names]
 
-APPROVE = [always_true, fifty_fifty,]
+APPROVE = [always_true, fifty_fifty, three_to_one]
 DISAPPROVE = [always_false, bounce_back, skip_over]
-MOVE = [always_true, fifty_fifty, skip_over, bounce_back]
+MOVE = [always_true, three_to_one, skip_over, bounce_back]
