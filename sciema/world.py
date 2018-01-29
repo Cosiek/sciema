@@ -11,21 +11,21 @@ FIELD_TYPES = {
     'green': {'color': (0, 255, 0), 'possible': 10},
     'blue': {'color': (0, 0, 255), 'possible': 10},
     #'red': {'color': (255, 0, 0), 'possible': 1},
-    #'grey': {'color': (200, 150, 150), 'possible': 1},
+    'grey': {'color': (200, 150, 150), 'possible': 1},
     'yellow': {'color': (255, 255, 0), 'possible': 1},
     #'orange': {'color': (255, 128, 0), 'possible': 1},
     #'pink': {'color': (255, 192, 203), 'possible': 1},
     #'raspberry': {'color': (135, 38, 87), 'possible': 1},
     #'plum': {'color': (221, 160, 221), 'possible': 1},
     #'purple': {'color': (128, 0, 128), 'possible': 1},
-    #'slateblue': {'color': (106, 90, 205), 'possible': 1},
+    'slateblue': {'color': (106, 90, 205), 'possible': 1},
     #'navy': {'color': (0, 0, 128), 'possible': 1},
-    #'dodgerblue': {'color': (30, 144, 255), 'possible': 1},
-    #'lightblue': {'color': (173, 216, 230), 'possible': 1},
+    'dodgerblue': {'color': (30, 144, 255), 'possible': 1},
+    'lightblue': {'color': (173, 216, 230), 'possible': 1},
     #'cyan': {'color': (0, 255, 255), 'possible': 1},
-    #'mint': {'color': (189, 252, 201), 'possible': 1},
-    #'cobaltgreen': {'color': (61, 145, 62), 'possible': 1},
-    #'darkgreen': {'color': (0, 100, 0), 'possible': 1},
+    'mint': {'color': (189, 252, 201), 'possible': 1},
+    'cobaltgreen': {'color': (61, 145, 62), 'possible': 1},
+    'darkgreen': {'color': (0, 100, 0), 'possible': 1},
     #'khaki': {'color': (255, 215, 0), 'possible': 1},
     #'orangered': {'color': (255, 69, 0), 'possible': 1},
     #'snow': {'color': (255, 250, 250), 'possible': 1},
@@ -33,6 +33,12 @@ FIELD_TYPES = {
     'start': {'color': (255, 255, 255), 'possible': 0},
     'finish': {'color': (0, 0, 0), 'possible': 0},
 }
+
+POSSBLE_SUM = sum([v['possible'] for v in FIELD_TYPES.values()])
+FIELD_TYPES['green']['possible'] = \
+    (POSSBLE_SUM - FIELD_TYPES['green']['possible']) * 2
+FIELD_TYPES['blue']['possible'] = \
+    (POSSBLE_SUM - FIELD_TYPES['blue']['possible']) * 2
 
 
 class World(object):
@@ -45,6 +51,7 @@ class World(object):
 
         self.move_validation_rules = {}
         self.set_move_validation_rules()
+        self.set_initial_move_validation_rules()
         self.settle_actions = {}
         self.set_settle_actions()
 
@@ -141,23 +148,30 @@ class World(object):
 
     def set_move_validation_rules(self):
         for couple in product(FIELD_TYPES.keys(), repeat=2):
-            if couple[1] == 'finish':
-                self.move_validation_rules[couple] = choice(DISAPPROVE)
-            elif couple[0] == 'start' or couple[1] == 'yellow':
+            if couple[0] == 'start':
                 self.move_validation_rules[couple] = choice(APPROVE)
             elif couple[0] == couple[1]:
+                self.move_validation_rules[couple] = choice(MOVE)
+            elif 'blue' in couple and 'green' in couple:
                 self.move_validation_rules[couple] = choice(MOVE)
             else:
                 self.move_validation_rules[couple] = choice(VALIDATORS)
 
+    def set_initial_move_validation_rules(self):
+        for couple in self.move_validation_rules.keys():
+            if couple[1] == 'finish':
+                self.move_validation_rules[couple] = choice(DISAPPROVE)
+
     def set_settle_actions(self):
-        #for field_type in FIELD_TYPES.keys():
-        #    self.settle_actions[field_type] = choice(SETTLE_ACTIONS)
         self.settle_actions['start'] = do_nothing
         self.settle_actions['green'] = do_nothing
         self.settle_actions['blue'] = do_nothing
         self.settle_actions['finish'] = finish_off
         self.settle_actions['yellow'] = total_random
+        for field_type in FIELD_TYPES.keys():
+            if field_type in self.settle_actions:
+                continue
+            self.settle_actions[field_type] = choice(SETTLE_ACTIONS)
 
     def to_dct(self):
         return {
