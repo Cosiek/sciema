@@ -78,7 +78,7 @@ def copy_finish(*args, **kwargs):
     world = kwargs['world']
     row = randint(1, world.x_size - 2)
     col = randint(1, world.y_size - 2)
-    world.map[row][col] = 'finish'
+    world.map[row][col] = chr(127937)
     return u'{} zrobił kolejną metę'.format(kwargs['player'].name)
 
 
@@ -91,8 +91,8 @@ def move_finish(*args, **kwargs):
 def swap_start_and_finish(*args, **kwargs):
     world = kwargs['world']
     middle_row_idx, _ = world.get_start_position()
-    world.map[middle_row_idx][0] = 'finish'
-    world.map[middle_row_idx][world.x_size - 1] = 'start'
+    world.map[middle_row_idx][0] = chr(127937)
+    world.map[middle_row_idx][world.x_size - 1] = chr(127987)
     return u'{} zamienił start z metą'.format(kwargs['player'].name)
 
 
