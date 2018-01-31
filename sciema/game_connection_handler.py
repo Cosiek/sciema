@@ -24,12 +24,10 @@ class GameConnectionHandler(tornado.websocket.WebSocketHandler):
     # connections handling ------------
 
     def open(self, *args):
-        print('Nowy klient')
         self.stream.set_nodelay(True)
         CLIENTS.append(self)
 
     def on_message(self, message):
-        print('Nowa wiadomość: ', message)
         # validate input data
         data = self.basic_validate(message)
         if data is None:

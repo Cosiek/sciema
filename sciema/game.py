@@ -43,7 +43,6 @@ class Game(object):
         player.connection = None
 
     def handle_action(self, data, connection):
-        print(data)
         if data['action'] == 'run_game':
             if not connection is self.owner:
                 connection.err("Only the owner can run a game")
