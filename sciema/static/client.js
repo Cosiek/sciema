@@ -1,7 +1,7 @@
 (function () {
     var states = {'waiting': 'waiting', 'game_on': 'game_on',
                   'finished': 'finished', 'game_start': 'game_start'}
-    var game = {'state': states.waiting, waitingForResponse: false}
+    var game = {'state': states.waiting, waitingForResponse: false, nextStep:null}
     var ws = new WebSocket('ws://' + location.host + '/websocket');
 
     ws.onopen = function(){console.log('Halo serwer!')};
@@ -61,11 +61,21 @@
         action = {'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right'}[event.key];
         if (!action || game.state != states.game_on){return null}
         event.preventDefault();
-        if (game.waitingForResponse){return null}
+        if (game.waitingForResponse){
+            game.nextStep = event;
+            return null;
+        }
+        game.nextStep = null;
         dct = {'game': game.name, 'player': game.player, 'action': action}
         game.waitingForResponse = true;
         ws.send(JSON.stringify(dct));
     });
+
+    triggerNextStep = function(){
+        if (game.nextStep){
+            document.dispatchEvent(game.nextStep);
+        }
+    }
 
 
     // handle return messages -------------------------------------------------
@@ -159,6 +169,7 @@
                     if (oldPosition[0] == currPosition[0] && oldPosition[1] == currPosition[1]){
                         // don't block player if move wasn't allowed
                         game.waitingForResponse = false;
+                        triggerNextStep();
                         return null;
                     }
                     // notify server, that this move is complete
@@ -176,6 +187,7 @@
                 // mark that this player can move again
                 if (gdt.player == game.player){
                     game.waitingForResponse = false;
+                    triggerNextStep();
                 }
             }
         }
