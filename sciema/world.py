@@ -136,16 +136,11 @@ class World(object):
         """
         Mark that player reached his position after move
         """
-        is_move = player.is_move()  # check if user isn't stepping in place
         player.settle()
         # get a reaction
-        if is_move:
-            curr_field = self.map[player.position[0]][player.position[1]]
-            settle_f = self.get_settle_function(curr_field)
-            msg = settle_f(world=self, player=player, curr_field=curr_field)
-        else:
-            msg = ''
-        return msg
+        curr_field = self.map[player.position[0]][player.position[1]]
+        settle_f = self.get_settle_function(curr_field)
+        return settle_f(world=self, player=player, curr_field=curr_field)
 
     def get_settle_function(self, field_name):
         """ get right function depending on field """
