@@ -92,7 +92,7 @@ class World(object):
             for field_name in poll:
                 yield field_name
 
-    def is_valid_move(self, player, direction):
+    def request_move(self, player, direction):
         if player.is_moving:
             return False, player.requested_position
         # calculate requested position

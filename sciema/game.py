@@ -63,7 +63,7 @@ class Game(object):
             return True, state
         elif data['action'] in ('up', 'down', 'right', 'left'):
             player = self.players[connection.player_name]
-            is_valid, position = self.world.is_valid_move(player, data['action'])
+            is_valid, position = self.world.request_move(player, data['action'])
             response = {
                 'player': player.name,
                 'action': 'move',
