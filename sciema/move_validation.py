@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-
+from copy import deepcopy
 from random import randint
 
 """
@@ -41,7 +41,7 @@ def three_to_one(*args, **kwargs):
 
 
 def skip_over(*args, **kwargs):
-    requested_pos = kwargs['requested_pos'].copy()
+    requested_pos = deepcopy(kwargs['requested_pos'])
     direction = kwargs['direction']
     world = kwargs['world']
     if direction == 'up':
