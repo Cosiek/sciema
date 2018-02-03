@@ -170,10 +170,10 @@
                         // don't block player if move wasn't allowed
                         game.waitingForResponse = false;
                         triggerNextStep();
-                        return null;
+                    } else {
+                        game.waitingForResponse = true;
                     }
                     // notify server, that this move is complete
-                    game.waitingForResponse = true;
                     setTimeout(function(){
                         ws.send(JSON.stringify({'action': 'move-confirm',
                             'game': game.name, 'player': game.player
