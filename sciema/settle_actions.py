@@ -113,6 +113,20 @@ def swap_start_and_finish(*args, **kwargs):
     return u'{} zamienił start z metą'.format(kwargs['player'].name)
 
 
+def who_is_me(*args, **kwargs):
+    looks = [p.look for p in kwargs['world'].players.values()]
+    shuffle(looks)
+    for player in kwargs['world'].players.values():
+        player.look = looks.pop()
+    return u'{} pozamianiał nam ciała'.format(kwargs['player'].name)
+
+
+def who_is_who(*args, **kwargs):
+    for player in kwargs['world'].players.values():
+        player.look = player.get_new_look()
+    return u'{} pozmianiał nam ciała'.format(kwargs['player'].name)
+
+
 def go_back_in_time(*args, **kwargs):
     player = kwargs['player']
     player.set_position(player.history[0])
@@ -161,6 +175,7 @@ def step_on_someone(*args, **kwargs):
 _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
 SETTLE_ACTIONS = [_locals[vn] for vn in _validator_names]
+
 
 def finish_off(*args, **kwargs):
     kwargs['world'].game.state = kwargs['world'].game.states.finished
