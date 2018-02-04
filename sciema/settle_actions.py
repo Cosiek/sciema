@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 
-from random import choice, randint
+from random import choice, randint, shuffle
 
 """
 Keyword arguments passed to settle function
@@ -63,6 +63,15 @@ def swap_players_positions(*args, **kwargs):
     player2.set_position(player1.position)
     player1.set_position(pos2)
     return u'{} zamienił się pozycjami z {}'.format(player1.name, player2.name)
+
+
+def shuffle_positions(*args, **kwargs):
+    players = kwargs['world'].players
+    positions = [p.position for p in players.values()]
+    shuffle(positions)
+    for player in players.values():
+        player.set_position(positions.pop())
+    return u'{} przetasował pozycje graczy'.format(kwargs['player'].name)
 
 
 def hide_finish(*args, **kwargs):
@@ -138,9 +147,14 @@ def move_everyone_to_first_row(*args, **kwargs):
         move_to_first_row(player=player)
     return u'{} wysyła wszystkich do pierwszego rzędu'.format(kwargs['player'].name)
 
-# shuffle positions
-# shuffle images
-# step on someone
+
+def step_on_someone(*args, **kwargs):
+    this_player = kwargs['player']
+    for player in kwargs['world'].players.values():
+        if (player.name != this_player.name and
+                player.position == this_player.position):
+            player.set_position(kwargs['world'].get_start_position())
+    return u'{} nie chce towarzystwa w tym miejscu.'.format(this_player.name)
 
 # NOTE: keep all functions that should be used for move validation
 # above this statement
