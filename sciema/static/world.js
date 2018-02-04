@@ -73,26 +73,31 @@ class World  {
         for (let player of players){
             // crate sprite
             player.sprite = document.createElement('div');
-            player.sprite.classList.add('player-sprite')
+            player.sprite.classList.add('player-sprite');
             mapContainerDiv.insertBefore(player.sprite, mapContainerDiv.firstChild);
             // change its appearance
-            player.sprite.textContent = player['look']['icon'];
             player.sprite.style.height = this.spriteSize + 'px';
             player.sprite.style.width = this.spriteSize + 'px';
             player.sprite.style.display = 'table-cell';
             player.sprite.style['vertical-align'] = 'middle';
             player.sprite.style['text-align'] = 'center';
-            let color = player['look']['color']
-            let rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
-            player.sprite.style.color = rgb;
-            rgb = 'rgb(' + (255 - color[0]) + ',' + (255 - color[1]) + ',' + (255 - color[2]) + ')'
-            player.sprite.style.background = rgb;
+            this.setPlayerLook(player, player['look'])
             // and set positioning
             player.sprite.style.display = 'inline-block';
             player.sprite.style.position = 'absolute';
             // save whole player object
             this.players[player['name']] = player;
         }
+    }
+
+    setPlayerLook(player, look){
+        // change its appearance
+        player.sprite.textContent = look['icon'];
+        let color = look['color']
+        let rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
+        player.sprite.style.color = rgb;
+        rgb = 'rgb(' + (255 - color[0]) + ',' + (255 - color[1]) + ',' + (255 - color[2]) + ')'
+        player.sprite.style.background = rgb;
     }
 
     updatePlayers(players, forceReposition){
@@ -106,6 +111,8 @@ class World  {
                     let pos = this.getPlayerCoordinates(player.position)
                     curr.sprite.style.left = pos[0] + 'px';
                     curr.sprite.style.top = pos[1] + 'px';
+                } else if ( attr == 'look' ){
+                    this.setPlayerLook(curr, player['look'])
                 }
                 curr[attr] = player[attr];
                 if (player.connected === false){
