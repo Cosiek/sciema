@@ -134,7 +134,11 @@ class World(object):
         if is_valid:
             player.request_position(position)
         else:
-            player.invalid_move()
+            # if player is stuck for to long, send him back to start
+            if player.invalid_move() >= 5:
+                position = self.get_start_position()
+                player.request_position(position)
+                is_valid = True
         return is_valid, position
 
     def get_move_validation_function(self, curr_field, next_field):

@@ -14,6 +14,7 @@ class Player(object):
         self.connected = True
 
         self.requested_position = None  # indicates if player is on the move
+        self.invalid_tries = 0
         self.history = deque(maxlen=5)
         self.is_winner = False
 
@@ -21,9 +22,12 @@ class Player(object):
 
     def request_position(self, position):
         self.requested_position = position
+        self.invalid_tries = 0
 
     def invalid_move(self):
         self.requested_position = None
+        self.invalid_tries += 1
+        return self.invalid_tries
 
     def settle(self):
         self.set_position(self.requested_position)
