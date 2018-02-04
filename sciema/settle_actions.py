@@ -130,6 +130,9 @@ def move_everyone_to_first_row(*args, **kwargs):
         move_to_first_row(player=player)
     return u'{} wysyła wszystkich do pierwszego rzędu'.format(kwargs['player'].name)
 
+# shuffle positions
+# shuffle images
+# step on someone
 
 # NOTE: keep all functions that should be used for move validation
 # above this statement

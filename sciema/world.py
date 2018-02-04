@@ -47,6 +47,8 @@ class World(object):
         self.x_size, self.y_size = size
 
         self.map = []
+        self.starts = []
+        self.finishes = []
         self.generate_random_map()
 
         self.move_validation_rules = {}
@@ -71,14 +73,19 @@ class World(object):
                 row.append(next(rfi))
             map_.append(row)
         # add start and finish fields
-        middle_row_idx, _ = self.get_start_position()
+        middle_row_idx = int((self.y_size + 1) / 2)
         map_[middle_row_idx][0] = chr(127987)
+        self.starts = [[middle_row_idx, 0], ]
         map_[middle_row_idx][self.x_size - 1] = chr(127937)
+        self.finishes = [[middle_row_idx, self.x_size - 1], ]
         # set map
         self.map = map_
 
     def get_start_position(self):
-        return [int((self.y_size + 1) / 2), 0]
+        return self.starts[0]
+
+    def get_finish_position(self):
+        return self.finishes[-1]
 
     @staticmethod
     def get_random_field_iterator():
