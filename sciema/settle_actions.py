@@ -68,9 +68,11 @@ def swap_players_positions(*args, **kwargs):
 def hide_finish(*args, **kwargs):
     world = kwargs['world']
     # put something new where finish is
-    middle_row_idx, _ = world.get_start_position()
+    if not world.finishes:
+        return u'{} nic nie zrobił!'.format(kwargs['player'].name)
+    finish_position = world.finishes.pop()
     rfi = world.get_random_field_iterator()
-    world.map[middle_row_idx][world.x_size - 1] = next(rfi)
+    world.map[finish_position[0]][finish_position[1]] = next(rfi)
     return u'{} zniknął metę!'.format(kwargs['player'].name)
 
 
@@ -79,6 +81,7 @@ def copy_finish(*args, **kwargs):
     row = randint(1, world.x_size - 2)
     col = randint(1, world.y_size - 2)
     world.map[row][col] = chr(127937)
+    world.finishes.append([row, col])
     return u'{} zrobił kolejną metę'.format(kwargs['player'].name)
 
 
@@ -90,9 +93,14 @@ def move_finish(*args, **kwargs):
 
 def swap_start_and_finish(*args, **kwargs):
     world = kwargs['world']
-    middle_row_idx, _ = world.get_start_position()
-    world.map[middle_row_idx][0] = chr(127937)
-    world.map[middle_row_idx][world.x_size - 1] = chr(127987)
+    if not (world.starts and world.finishes):
+        return u'{} nie zamienił niczego z niczym'.format(kwargs['player'].name)
+    start = world.starts.pop()
+    finish = world.finishes.pop()
+    world.starts.append(finish)
+    world.finishes.append(start)
+    world.map[start[0]][start[1]] = chr(127937)  # finish
+    world.map[finish[0]][finish[1]] = chr(127987)  # start
     return u'{} zamienił start z metą'.format(kwargs['player'].name)
 
 
@@ -139,7 +147,6 @@ def move_everyone_to_first_row(*args, **kwargs):
 _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
 SETTLE_ACTIONS = [_locals[vn] for vn in _validator_names]
-
 
 def finish_off(*args, **kwargs):
     kwargs['world'].game.state = kwargs['world'].game.states.finished
