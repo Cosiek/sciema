@@ -22,6 +22,9 @@ class Player(object):
     def request_position(self, position):
         self.requested_position = position
 
+    def invalid_move(self):
+        self.requested_position = None
+
     def settle(self):
         self.set_position(self.requested_position)
         self.requested_position = None

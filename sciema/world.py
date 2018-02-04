@@ -127,7 +127,7 @@ class World(object):
         if is_valid:
             player.request_position(position)
         else:
-            player.request_position(None)
+            player.invalid_move()
         return is_valid, position
 
     def get_move_validation_function(self, curr_field, next_field):
