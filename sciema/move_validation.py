@@ -63,9 +63,13 @@ def bounce_back(*args, **kwargs):
         'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'
     }
     kwargs['direction'] = opposite_directions[kwargs['direction']]
-    _, req_pos = skip_over(*args, **kwargs)
-    kwargs['requested_pos'] = req_pos
-    return skip_over(*args, **kwargs)
+    curr_pos = deepcopy(kwargs['player'].position)
+    _, position = skip_over(*args, **kwargs)
+    kwargs['requested_pos'] = position
+    _, position = skip_over(*args, **kwargs)
+    if curr_pos == position:
+        return always_false(*args, **kwargs)
+    return True, position
 
 
 def _is_outside_map(position, world):
