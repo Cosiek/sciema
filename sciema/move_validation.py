@@ -53,8 +53,7 @@ def skip_over(*args, **kwargs):
     elif direction == 'right':
         requested_pos[1] += 1
     # check walking outside of world
-    if (requested_pos[0] < 0 or world.x_size <= requested_pos[0] or
-            requested_pos[1] < 0 or world.y_size <= requested_pos[1]):
+    if _is_outside_map(requested_pos, world):
         return always_true(*args, **kwargs)
     return True, requested_pos
 
@@ -67,6 +66,11 @@ def bounce_back(*args, **kwargs):
     _, req_pos = skip_over(*args, **kwargs)
     kwargs['requested_pos'] = req_pos
     return skip_over(*args, **kwargs)
+
+
+def _is_outside_map(position, world):
+    return (position[0] < 0 or world.x_size <= position[0] or
+            position[1] < 0 or world.y_size <= position[1])
 
 
 def only_vertical(*args, **kwargs):
@@ -96,7 +100,7 @@ def no_swimming(*args, **kwargs):
 # above this statement
 _validator_names = set(dir()) - imported - set(('imported',))
 _locals = locals()
-VALIDATORS = [_locals[vn] for vn in _validator_names]
+VALIDATORS = [_locals[vn] for vn in _validator_names if not vn.startswith('_')]
 
 APPROVE = [always_true, fifty_fifty, three_to_one]
 DISAPPROVE = [always_false, bounce_back, skip_over]
